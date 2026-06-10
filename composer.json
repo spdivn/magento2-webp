@@ -16,7 +16,7 @@
         "ext-imagick": "Required by ImagickConverter to convert JPG/PNG to WebP"
     },
     "license": [
-        "Proprietary"
+        "MIT"
     ],
     "autoload": {
         "files": [
