@@ -1,0 +1,21 @@
+/**
+ * Hide the Uppy Dashboard inline drop zone in PageBuilder image uploaders.
+ *
+ * Magento_Ui/js/form/element/file-uploader.js always initialises Uppy with
+ * `inline: true`, which mounts a full Dashboard widget (containing "Drop your
+ * files here" and "Drop files here or [browse files]") inside
+ * `.file-uploader-area`.
+ *
+ * PageBuilder uses its own custom preview template, so the Uppy drop-zone UI
+ * is redundant and visually broken in that context.
+ *
+ * The `.image-uploader` class is added exclusively by the PageBuilder template
+ * (Magento_PageBuilder/form/element/uploader/image.html, line 13):
+ *   class="file-uploader image-uploader"
+ * It is NOT present on standard Magento_Ui file/image uploaders, so this rule
+ * is safely scoped to PageBuilder only.
+ */
+.image-uploader .file-uploader-area .uppy-Root {
+    display: none !important;
+}
+

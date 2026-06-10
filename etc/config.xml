@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <spdivn_webp>
+            <general>
+                <active>0</active>
+                <cron_expression>0 2 * * *</cron_expression>
+            </general>
+            <conversion>
+                <path>pub/media/wysiwyg</path>
+                <driver>gd</driver>
+                <quality>80</quality>
+                <keep_originals>0</keep_originals>
+                <recursive>1</recursive>
+            </conversion>
+        </spdivn_webp>
+    </default>
+</config>

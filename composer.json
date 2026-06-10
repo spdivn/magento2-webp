@@ -1,0 +1,29 @@
+{
+    "name": "spdivn/module-webp",
+    "version": "1.0.0",
+    "description": "Adds WebP image upload support across all Magento 2 upload points",
+    "type": "magento2-module",
+    "require": {
+        "php": "^8.1",
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-cms": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-cron": "*"
+    },
+    "suggest": {
+        "ext-gd": "Required by GdConverter to convert JPG/PNG to WebP",
+        "ext-imagick": "Required by ImagickConverter to convert JPG/PNG to WebP"
+    },
+    "license": [
+        "Proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Spdivn\\WebP\\": ""
+        }
+    }
+}
