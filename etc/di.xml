@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Image\Adapter\Gd2" type="Spdivn\WebP\Model\Adapter\Gd2"/>
+    <!-- Framework File Uploader: allow .webp extension through checkAllowedExtension() -->
+    <type name="Magento\Framework\File\Uploader">
+        <plugin name="spdivn_webp_allow_extension" type="Spdivn\WebP\Plugin\FileUploader\AllowWebpExtensionPlugin" sortOrder="10"/>
+
+        <!-- Framework File Uploader: inject image/webp into image MIME type validation lists -->
+        <plugin name="spdivn_webp_check_mime_type" type="Spdivn\WebP\Plugin\FileUploader\CheckMimeTypePlugin" sortOrder="10"/>
+    </type>
+    <!-- MediaStorage File Uploader: same plugin (overrides checkAllowedExtension) -->
+    <type name="Magento\MediaStorage\Model\File\Uploader">
+        <plugin name="spdivn_webp_allow_extension_media_storage" type="Spdivn\WebP\Plugin\FileUploader\AllowWebpExtensionPlugin" sortOrder="10"/>
+    </type>
+    <!-- MediaStorage Image Validator: allow image/webp MIME type -->
+    <type name="Magento\MediaStorage\Model\File\Validator\Image">
+        <plugin name="spdivn_webp_image_validator" type="Spdivn\WebP\Plugin\MediaStorage\ImageValidatorPlugin" sortOrder="10"/>
+    </type>
+    <!-- MediaGalleryUi ImageUploader: add webp to JS-side allowed extensions config -->
+    <type name="Magento\MediaGalleryUi\Ui\Component\ImageUploader">
+        <plugin name="spdivn_webp_media_gallery_ui_uploader" type="Spdivn\WebP\Plugin\MediaGalleryUi\ImageUploaderPlugin" sortOrder="10"/>
+    </type>
+    <!-- API ImageContentValidator: inject image/webp into allowed MIME types -->
+    <type name="Magento\Framework\Api\ImageContentValidator">
+        <arguments>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="webp" xsi:type="string">image/webp</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Category Image Upload virtual type: add webp extension and MIME type -->
+    <virtualType name="Magento\Catalog\CategoryImageUpload" type="Magento\Catalog\Model\ImageUploader">
+        <arguments>
+            <argument name="allowedExtensions" xsi:type="array">
+                <item name="webp" xsi:type="string">webp</item>
+            </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="webp" xsi:type="string">image/webp</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- CMS WYSIWYG Image Storage: add webp to both allowed and image_allowed sets -->
+    <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
+        <arguments>
+            <argument name="extensions" xsi:type="array">
+                <item name="allowed" xsi:type="array">
+                    <item name="webp" xsi:type="string">image/webp</item>
+                </item>
+                <item name="image_allowed" xsi:type="array">
+                    <item name="webp" xsi:type="string">image/webp</item>
+                </item>
+            </argument>
+        </arguments>
+        <!-- Catch thumbnail resize failures for WebP (GD may lack WebP support) -->
+        <plugin name="spdivn_webp_resize_file" type="Spdivn\WebP\Plugin\Storage\ResizeFilePlugin"  sortOrder="10"/>
+    </type>
+    <!-- Media Gallery Integration: allow webp to be indexed after upload -->
+    <type name="Magento\MediaGalleryIntegration\Plugin\SaveImageInformation">
+        <arguments>
+            <argument name="imageExtensions" xsi:type="array">
+                <item name="webp" xsi:type="string">webp</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Media Gallery Synchronization: include webp in bulk filesystem scan -->
+    <type name="Magento\MediaGallerySynchronization\Model\FetchMediaStorageFileBatches">
+        <arguments>
+            <argument name="fileExtensions" xsi:type="array">
+                <item name="webp" xsi:type="string">webp</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Theme Design Config Backend: allow webp for favicon and logo uploads -->
+    <type name="Magento\Theme\Model\Design\Backend\Image">
+        <plugin name="spdivn_webp_design_backend_image" type="Spdivn\WebP\Plugin\Design\Backend\AllowWebpPlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Theme\Model\Design\Backend\Favicon">
+        <plugin name="spdivn_webp_design_backend_favicon" type="Spdivn\WebP\Plugin\Design\Backend\AllowWebpPlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Theme\Model\Design\Backend\Logo">
+        <plugin name="spdivn_webp_design_backend_logo" type="Spdivn\WebP\Plugin\Design\Backend\AllowWebpPlugin" sortOrder="10"/>
+    </type>
+    <!-- Config Backend (legacy Stores > Config > Design): preferences for protected method -->
+    <preference for="Magento\Config\Model\Config\Backend\Image" type="Spdivn\WebP\Model\Config\Backend\Image"/>
+    <preference for="Magento\Config\Model\Config\Backend\Image\Favicon" type="Spdivn\WebP\Model\Config\Backend\Image\Favicon"/>
+    <preference for="Magento\Config\Model\Config\Backend\Image\Logo" type="Spdivn\WebP\Model\Config\Backend\Image\Logo"/>
+
+    <!-- ===================================================================== -->
+    <!-- Image Converter: CLI command                                           -->
+    <!-- ===================================================================== -->
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="spdivn_webp_convert_to_webp" xsi:type="object">
+                    Spdivn\WebP\Console\Command\ConvertToWebpCommand
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Image Converter: inject GD + Imagick converters into the Service -->
+    <type name="Spdivn\WebP\Model\Service\ConvertToWebpService">
+        <arguments>
+            <argument name="converters" xsi:type="array">
+                <item name="gd"      xsi:type="object">Spdivn\WebP\Model\Converter\GdConverter</item>
+                <item name="imagick" xsi:type="object">Spdivn\WebP\Model\Converter\ImagickConverter</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- ===================================================================== -->
+    <!-- WebP Converter Logger: writes to var/log/webp_converter.log           -->
+    <!-- ===================================================================== -->
+    <virtualType name="Spdivn\WebP\Logger\Handler\WebpConverterHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/webp_converter.log</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Spdivn\WebP\Logger\WebpConverterLogger">
+        <arguments>
+            <argument name="name" xsi:type="string">webp_converter</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="object">Spdivn\WebP\Logger\Handler\WebpConverterHandler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

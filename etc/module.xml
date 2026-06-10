@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Spdivn_WebP">
+        <sequence>
+            <module name="Magento_Framework"/>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_Cms"/>
+            <module name="Magento_MediaStorage"/>
+            <module name="Magento_MediaGalleryUi"/>
+            <module name="Magento_PageBuilder"/>
+            <module name="Magento_MediaGalleryIntegration"/>
+            <module name="Magento_MediaGallerySynchronization"/>
+            <module name="Magento_Theme"/>
+            <module name="Magento_Config"/>
+            <module name="Magento_Cron"/>
+        </sequence>
+    </module>
+</config>

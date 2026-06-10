@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="spdivn" translate="label" sortOrder="0">
+            <label>Spdivn</label>
+        </tab>
+        <section id="spdivn_webp" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>WebP / Image Converter</label>
+            <tab>spdivn</tab>
+            <resource>Spdivn_WebP::store_config</resource>
+
+            <!-- ============================================================ -->
+            <!-- GROUP: General                                                -->
+            <!-- ============================================================ -->
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Cron Conversion</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[When enabled, the cron job will automatically convert JPG/PNG images to WebP on the configured schedule.]]></comment>
+                </field>
+
+                <field id="cron_expression" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cron Schedule</label>
+                    <depends>
+                        <field id="spdivn_webp/general/active">1</field>
+                    </depends>
+                    <comment>
+                        <![CDATA[
+                            <pre>
+* * * * *
+| | | | |
+| | | | +---- Day of the Week   (0-6, 1 = Monday)
+| | | +------ Month of the Year (1-12)
+| | +-------- Day of the Month  (1-31)
+| +---------- Hour              (0-23)
++------------ Minute            (0-59)
+
+Example: 0 2 * * *  →  Daily at 02:00</pre>
+                        ]]>
+                    </comment>
+                </field>
+            </group>
+
+            <!-- ============================================================ -->
+            <!-- GROUP: Conversion Settings                                    -->
+            <!-- ============================================================ -->
+            <group id="conversion" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Conversion Settings</label>
+                <depends>
+                    <field id="spdivn_webp/general/active">1</field>
+                </depends>
+
+                <field id="path" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Images Directory Path</label>
+                    <depends>
+                        <field id="spdivn_webp/general/active">1</field>
+                    </depends>
+                    <comment><![CDATA[Path to the directory containing images to convert.<br/>Use an absolute path (e.g. <code>/var/www/html/pub/media/catalog</code>) or a path relative to the Magento root (e.g. <code>pub/media/catalog</code>).]]></comment>
+                </field>
+
+                <field id="driver" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Converter Driver</label>
+                    <depends>
+                        <field id="spdivn_webp/general/active">1</field>
+                    </depends>
+                    <source_model>Spdivn\WebP\Model\Config\Source\ConverterDriver</source_model>
+                    <comment><![CDATA[<strong>GD</strong>: built-in PHP extension (recommended). <strong>Imagick</strong>: requires the <code>imagick</code> PHP extension.]]></comment>
+                </field>
+
+                <field id="quality" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>WebP Quality</label>
+                    <depends>
+                        <field id="spdivn_webp/general/active">1</field>
+                    </depends>
+                    <validate>validate-digits validate-digits-range digits-range-0-100</validate>
+                    <comment><![CDATA[Integer from 0 (lowest) to 100 (highest). Default: 80.]]></comment>
+                </field>
+
+                <field id="keep_originals" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Keep Original Files</label>
+                    <depends>
+                        <field id="spdivn_webp/general/active">1</field>
+                    </depends>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[If <strong>No</strong>, original JPG/PNG files will be deleted after successful conversion.]]></comment>
+                </field>
+
+                <field id="recursive" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Scan Subdirectories Recursively</label>
+                    <depends>
+                        <field id="spdivn_webp/general/active">1</field>
+                    </depends>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[If <strong>Yes</strong>, all subdirectories inside the configured path will also be scanned.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
