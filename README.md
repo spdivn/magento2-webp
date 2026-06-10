@@ -39,6 +39,19 @@ At least one of `ext-gd` or `ext-imagick` must be available on the server.
 
 ### Via Composer
 
+Add the repository to your project's `composer.json` before requiring the package:
+
+```json
+"repositories": {
+    "spdivn-webp": {
+        "type": "git",
+        "url": "https://github.com/spdivn/magento2-webp.git"
+    }
+}
+```
+
+Then install the module:
+
 ```bash
 composer require spdivn/module-webp
 bin/magento module:enable Spdivn_WebP
