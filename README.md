@@ -1,4 +1,4 @@
-# Spdivn_WebP — Magento 2 WebP Image Converter
+# Magento 2 WebP Image Converter
 
 A Magento 2 module that adds full WebP support across all upload points and provides both a CLI command and a scheduled cron job to bulk-convert existing JPG/PNG images to WebP format.
 
